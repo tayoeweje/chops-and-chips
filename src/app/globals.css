@@ -3,6 +3,37 @@
 @tailwind utilities;
 
 :root {
+  --primary-color: #FFD54F;
+  --secondary-color: #D84315;
+  --font-family: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+}
+
+.glass-mode {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+.glass-mode .bg-white,
+.glass-mode .bg-gray-50 {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Override specific components for glass mode if needed */
+.glass-mode nav {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+:root {
   --background: #ffffff;
   --foreground: #171717;
 }

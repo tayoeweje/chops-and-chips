@@ -10,7 +10,9 @@ import {
     query,
     orderBy,
     serverTimestamp,
-    DocumentData
+    DocumentData,
+    setDoc,
+    getDoc
 } from "firebase/firestore";
 
 // Collection References
@@ -74,5 +76,12 @@ export const getOrder = (id: string, callback: (order: any) => void) => {
 
 // Theme
 export const saveThemeSettings = async (settings: DocumentData) => {
-    return await addDoc(collection(db, THEME_COLLECTION), settings);
+    const docRef = doc(db, THEME_COLLECTION, "current");
+    return await setDoc(docRef, settings, { merge: true });
+};
+
+export const getThemeSettings = async () => {
+    const docRef = doc(db, THEME_COLLECTION, "current");
+    const snapshot = await getDoc(docRef);
+    return snapshot.exists() ? snapshot.data() : null;
 };
