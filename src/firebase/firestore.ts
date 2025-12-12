@@ -85,3 +85,14 @@ export const getThemeSettings = async () => {
     const snapshot = await getDoc(docRef);
     return snapshot.exists() ? snapshot.data() : null;
 };
+
+export const subscribeToThemeSettings = (callback: (settings: any) => void) => {
+    const docRef = doc(db, THEME_COLLECTION, "current");
+    return onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+            callback(doc.data());
+        } else {
+            callback(null);
+        }
+    });
+};

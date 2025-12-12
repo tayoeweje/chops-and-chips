@@ -66,7 +66,7 @@ export default function Home() {
       {/* Food Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredFoods.map((food) => (
-          <div key={food.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+          <div key={food.id} className="card-base overflow-hidden rounded-lg">
             <div className="h-48 bg-gray-200 relative">
               {food.imageUrl ? (
                 <Image src={food.imageUrl} alt={food.name} width={400} height={300} className="w-full h-full object-cover" />

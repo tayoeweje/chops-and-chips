@@ -33,6 +33,56 @@ body {
   backdrop-filter: blur(10px);
 }
 
+/* Card Styles */
+.card-base {
+  transition: all 0.3s ease;
+}
+
+body.style-minimal .card-base {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body.style-minimal .card-base:hover {
+  transform: translateY(-2px);
+}
+
+body.style-bordered .card-base {
+  background: white;
+  border: 2px solid #e5e7eb;
+  box-shadow: none;
+}
+
+body.style-bordered .card-base:hover {
+  border-color: var(--secondary-color);
+}
+
+body.style-shadow .card-base {
+  background: white;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+body.style-shadow .card-base:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+body.style-glass .card-base {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+body.style-glass .card-base:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

@@ -8,6 +8,7 @@ export default function ThemeManagementPage() {
     const [secondaryColor, setSecondaryColor] = useState("#D84315");
     const [font, setFont] = useState("sans");
     const [glassMode, setGlassMode] = useState(false);
+    const [cardStyle, setCardStyle] = useState("shadow");
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -18,10 +19,50 @@ export default function ThemeManagementPage() {
                 if (settings.secondaryColor) setSecondaryColor(settings.secondaryColor);
                 if (settings.font) setFont(settings.font);
                 if (settings.glassMode !== undefined) setGlassMode(settings.glassMode);
+                if (settings.cardStyle) setCardStyle(settings.cardStyle);
             }
         };
         loadSettings();
     }, []);
+
+    const applyPreset = (preset: string) => {
+        switch (preset) {
+            case "ocean":
+                setPrimaryColor("#E0F7FA");
+                setSecondaryColor("#0277BD");
+                setFont("sans");
+                setGlassMode(true);
+                setCardStyle("glass");
+                break;
+            case "sunset":
+                setPrimaryColor("#FFF3E0");
+                setSecondaryColor("#E64A19");
+                setFont("serif");
+                setGlassMode(false);
+                setCardStyle("shadow");
+                break;
+            case "forest":
+                setPrimaryColor("#E8F5E9");
+                setSecondaryColor("#2E7D32");
+                setFont("mono");
+                setGlassMode(false);
+                setCardStyle("bordered");
+                break;
+            case "dark":
+                setPrimaryColor("#212121");
+                setSecondaryColor("#FFD54F");
+                setFont("sans");
+                setGlassMode(false);
+                setCardStyle("minimal");
+                break;
+            default:
+                setPrimaryColor("#FFD54F");
+                setSecondaryColor("#D84315");
+                setFont("sans");
+                setGlassMode(false);
+                setCardStyle("shadow");
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,7 +72,8 @@ export default function ThemeManagementPage() {
                 primaryColor,
                 secondaryColor,
                 font,
-                glassMode
+                glassMode,
+                cardStyle
             });
             // Force reload to apply theme immediately if ThemeProvider doesn't pick it up instantly (it should via window reload or context)
             // For now, simple alert.
@@ -114,17 +156,42 @@ export default function ThemeManagementPage() {
                             </select>
                         </div>
 
-                        <div className="flex items-center">
-                            <label className="flex items-center space-x-3 cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    checked={glassMode}
-                                    onChange={(e) => setGlassMode(e.target.checked)}
-                                    className="form-checkbox h-5 w-5 text-brand-red rounded focus:ring-brand-red"
-                                />
-                                <span className="text-gray-900 font-medium">Enable Liquid Glass Design (iOS 26 Style)</span>
-                            </label>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Card Style</label>
+                            <select
+                                value={cardStyle}
+                                onChange={(e) => setCardStyle(e.target.value)}
+                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-brand-red focus:border-brand-red"
+                            >
+                                <option value="shadow">Classic Shadow</option>
+                                <option value="minimal">Minimal (Transparent)</option>
+                                <option value="bordered">Bordered</option>
+                                <option value="glass">Glass Effect</option>
+                            </select>
                         </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        <label className="block text-sm font-medium text-gray-700">Theme Presets</label>
+                        <div className="flex flex-wrap gap-2">
+                            <button type="button" onClick={() => applyPreset("default")} className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm">Default</button>
+                            <button type="button" onClick={() => applyPreset("ocean")} className="px-3 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200 rounded text-sm">Ocean Breeze</button>
+                            <button type="button" onClick={() => applyPreset("sunset")} className="px-3 py-1 bg-orange-100 text-orange-800 hover:bg-orange-200 rounded text-sm">Sunset</button>
+                            <button type="button" onClick={() => applyPreset("forest")} className="px-3 py-1 bg-green-100 text-green-800 hover:bg-green-200 rounded text-sm">Forest</button>
+                            <button type="button" onClick={() => applyPreset("dark")} className="px-3 py-1 bg-gray-800 text-white hover:bg-gray-700 rounded text-sm">Midnight</button>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center">
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={glassMode}
+                                onChange={(e) => setGlassMode(e.target.checked)}
+                                className="form-checkbox h-5 w-5 text-brand-red rounded focus:ring-brand-red"
+                            />
+                            <span className="text-gray-900 font-medium">Enable Liquid Glass Design (iOS 26 Style)</span>
+                        </label>
                     </div>
 
                     <div className="pt-4">
@@ -141,7 +208,7 @@ export default function ThemeManagementPage() {
                 <div className="mt-12 border-t border-gray-200 pt-8">
                     <h2 className="text-xl font-bold mb-4">Preview</h2>
                     <div
-                        className={`p-6 border border-gray-200 rounded-lg transition-all duration-300 ${glassMode ? 'bg-white/20 backdrop-blur-lg shadow-xl border-white/30' : 'bg-white'}`}
+                        className={`p-6 rounded-lg transition-all duration-300 card-base ${glassMode ? 'bg-white/20 backdrop-blur-lg shadow-xl border-white/30' : 'bg-white'} ${cardStyle === 'minimal' ? 'card-minimal' : cardStyle === 'bordered' ? 'card-bordered' : cardStyle === 'glass' ? 'card-glass' : 'card-shadow'}`}
                         style={{ fontFamily: getFontFamily(font) }}
                     >
                         <div className="flex justify-between items-center mb-6">

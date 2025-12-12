@@ -1,24 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getThemeSettings } from "@/firebase/firestore";
+import { subscribeToThemeSettings } from "@/firebase/firestore";
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
     const [theme, setTheme] = useState<any>(null);
 
     useEffect(() => {
-        const fetchTheme = async () => {
-            try {
-                const settings = await getThemeSettings();
-                if (settings) {
-                    setTheme(settings);
-                    applyTheme(settings);
-                }
-            } catch (error) {
-                console.error("Failed to load theme:", error);
+        const unsubscribe = subscribeToThemeSettings((settings) => {
+            if (settings) {
+                setTheme(settings);
+                applyTheme(settings);
             }
-        };
-        fetchTheme();
+        });
+        return () => unsubscribe();
     }, []);
 
     const applyTheme = (settings: any) => {
@@ -42,6 +37,21 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
             document.body.classList.add("glass-mode");
         } else {
             document.body.classList.remove("glass-mode");
+        }
+
+        // Apply card style globally via a class on body or root, 
+        // but since we want to target specific elements, we can use a CSS variable or a data attribute.
+        // Let's use a data attribute on the body for simplicity in CSS selectors if needed, 
+        // OR just rely on the fact that we need to pass this to components.
+        // Actually, simpler approach: Add a class to body representing the card style, 
+        // and have CSS selectors like body.style-minimal .card-base { ... }
+        // Let's update globals.css to use this approach for cleaner component code.
+
+        document.body.classList.remove("style-minimal", "style-bordered", "style-shadow", "style-glass");
+        if (settings.cardStyle) {
+            document.body.classList.add(`style-${settings.cardStyle}`);
+        } else {
+            document.body.classList.add("style-shadow"); // Default
         }
     };
 
